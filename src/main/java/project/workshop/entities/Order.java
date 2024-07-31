@@ -1,6 +1,7 @@
 package project.workshop.entities;
 
 import jakarta.persistence.*;
+import project.workshop.enums.OrderStatus;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -22,13 +23,16 @@ public class Order implements Serializable {
     @JoinColumn(name = "client_id")
     private User client;
 
-    public Order(){
+    private Integer orderStatus;
+
+    public Order() {
         super();
     }
 
-    public Order(Integer id, LocalDateTime moment, User client) {
+    public Order(Integer id, LocalDateTime moment, OrderStatus orderStatus, User client) {
         this.id = id;
         this.moment = moment;
+        setOrderStatus(orderStatus);
         this.client = client;
     }
 
@@ -54,6 +58,14 @@ public class Order implements Serializable {
 
     public void setClient(User client) {
         this.client = client;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return OrderStatus.valueOf(orderStatus);
+    }
+
+    public void setOrderStatus(OrderStatus status) {
+        this.orderStatus = status.getCode();
     }
 
     @Override

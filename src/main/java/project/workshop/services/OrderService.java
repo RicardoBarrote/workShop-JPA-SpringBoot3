@@ -1,10 +1,9 @@
 package project.workshop.services;
 
-import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.workshop.entities.Order;
-import project.workshop.repositories.OrderReposiroty;
+import project.workshop.repositories.OrderRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,14 +12,14 @@ import java.util.Optional;
 public class OrderService {
 
     @Autowired
-    OrderReposiroty orderReposiroty;
+    OrderRepository orderRepository;
 
     public List<Order> findAll(){
-        return orderReposiroty.findAll();
+        return orderRepository.findAll();
     }
 
     public Order findById(Integer id){
-        Optional<Order> order = orderReposiroty.findById(id);
+        Optional<Order> order = orderRepository.findById(id);
         return order.get();
     }
 }
