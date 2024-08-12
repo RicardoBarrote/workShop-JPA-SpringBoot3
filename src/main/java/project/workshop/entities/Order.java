@@ -1,5 +1,6 @@
 package project.workshop.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import project.workshop.enums.OrderStatus;
 
@@ -28,6 +29,9 @@ public class Order {
 
     @OneToMany(mappedBy = "id.order")
     Set<OrderItem> items = new HashSet<>();
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
 
     public Order() {
         super();
@@ -62,6 +66,15 @@ public class Order {
 
     public void setClient(User client) {
         this.client = client;
+    }
+
+    @JsonIgnore
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
     public Set<OrderItem> getItems() {
