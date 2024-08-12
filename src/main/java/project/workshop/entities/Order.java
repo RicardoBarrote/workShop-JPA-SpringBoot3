@@ -3,14 +3,14 @@ package project.workshop.entities;
 import jakarta.persistence.*;
 import project.workshop.enums.OrderStatus;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_orders")
-public class Order implements Serializable {
-    private static final long versionUID = 1L;
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,11 +19,15 @@ public class Order implements Serializable {
     @Column(nullable = false)
     private LocalDateTime moment;
 
+
     @ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
 
     private Integer orderStatus;
+
+    @OneToMany(mappedBy = "id.order")
+    Set<OrderItem> items = new HashSet<>();
 
     public Order() {
         super();
@@ -58,6 +62,10 @@ public class Order implements Serializable {
 
     public void setClient(User client) {
         this.client = client;
+    }
+
+    public Set<OrderItem> getItems() {
+        return items;
     }
 
     public OrderStatus getOrderStatus() {

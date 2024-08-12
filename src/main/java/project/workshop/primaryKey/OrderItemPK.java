@@ -6,19 +6,18 @@ import jakarta.persistence.ManyToOne;
 import project.workshop.entities.Order;
 import project.workshop.entities.Product;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class OrderItemPK implements Serializable {
-    private static final long versionUID = 1L;
+public class OrderItemPK {
+
 
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "product")
+    @JoinColumn(name = "product_id")
     private Product product;
 
     public Order getOrder() {
@@ -36,6 +35,7 @@ public class OrderItemPK implements Serializable {
     public void setProduct(Product product) {
         this.product = product;
     }
+
 
     @Override
     public boolean equals(Object o) {

@@ -1,5 +1,6 @@
 package project.workshop.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -13,7 +14,7 @@ import java.util.Objects;
 public class OrderItem {
 
     @EmbeddedId
-    public OrderItemPK id = new OrderItemPK();
+    private OrderItemPK id = new OrderItemPK();
 
     @Column(nullable = false)
     private Integer quantity;
@@ -46,6 +47,24 @@ public class OrderItem {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+
+    @JsonIgnore
+    public Order getOrder() {
+        return id.getOrder();
+    }
+
+    public void setOrder(Order order) {
+        id.setOrder(order);
+    }
+
+    public Product getProduct() {
+        return id.getProduct();
+    }
+
+    public void setProduct(Product product) {
+        id.setProduct(product);
     }
 
     @Override
