@@ -49,7 +49,6 @@ public class OrderItem {
         this.price = price;
     }
 
-
     @JsonIgnore
     public Order getOrder() {
         return id.getOrder();
@@ -65,6 +64,10 @@ public class OrderItem {
 
     public void setProduct(Product product) {
         id.setProduct(product);
+    }
+
+    public double getSubTotal(){
+        return this.quantity * this.price;
     }
 
     @Override
