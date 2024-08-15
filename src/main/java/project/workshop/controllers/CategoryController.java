@@ -2,13 +2,13 @@ package project.workshop.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import project.workshop.entities.Category;
+import project.workshop.requestPayLoad.CategoryRequestPayLoad;
 import project.workshop.services.CategoryService;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -30,4 +30,28 @@ public class CategoryController {
         return ResponseEntity.ok().body(category);
     }
 
+    @PostMapping
+    ResponseEntity<Category> createdCategory(@RequestBody CategoryRequestPayLoad payLoad) {
+        Category category = categoryService.createdCategory(payLoad);
+
+        URI newURI = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(category.getId())
+                .toUri();
+
+        return ResponseEntity.created(newURI).body(category);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Category> deleteCategory(@PathVariable Integer id) {
+        categoryService.deleteCategory(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Category> updateCategory(@PathVariable Integer id, @RequestBody CategoryRequestPayLoad payLoad) {
+        Category category = categoryService.updateCategory(id, payLoad);
+        return ResponseEntity.ok().body(category);
+    }
 }

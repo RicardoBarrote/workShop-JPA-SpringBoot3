@@ -8,6 +8,7 @@ import project.workshop.entities.*;
 import project.workshop.enums.OrderStatus;
 import project.workshop.repositories.*;
 
+
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
@@ -61,8 +62,8 @@ public class TestConfig implements CommandLineRunner {
         OrderItem oi3 = new OrderItem(o2, p2, 4, p2.getPrice());
         orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3));
 
-        Payment pay1 = new Payment(null, LocalDateTime.of(2024, 05, 15, 20, 58, 16), o1);
+       /* Payment pay1 = new Payment(null, LocalDateTime.of(2024, 05, 15, 20, 58, 16), o1);
         o1.setPayment(pay1);
-        orderRepository.saveAll(Arrays.asList(o1));
+        orderRepository.saveAll(Arrays.asList(o1));*/
     }
 }

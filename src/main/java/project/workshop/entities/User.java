@@ -2,6 +2,7 @@ package project.workshop.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import project.workshop.requestPayLoad.UserRequestPayLoad;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ public class User {
 
     @Column(nullable = false)
     private String name;
+
 
     @Column(nullable = false)
     private String email;
@@ -41,6 +43,14 @@ public class User {
         this.email = email;
         this.password = password;
         this.phone = phone;
+    }
+
+    public User (UserRequestPayLoad payLoad){
+        this.id = payLoad.id();
+        this.name = payLoad.name();
+        this.email = payLoad.email();;
+        this.phone = payLoad.phone();
+        this.password = payLoad.password();
     }
 
     public Integer getId() {

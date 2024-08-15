@@ -2,6 +2,7 @@ package project.workshop.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import project.workshop.requestPayLoad.ProductRequestPayload;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -44,6 +45,14 @@ public class Product {
         this.description = description;
         this.link = link;
         this.price = price;
+    }
+
+    public Product(ProductRequestPayload payload) {
+        this.id = payload.id();
+        this.name = payload.name();
+        this.description = payload.description();
+        this.link = payload.link();
+        this.price = payload.price();
     }
 
     public Integer getId() {
@@ -91,10 +100,10 @@ public class Product {
     }
 
     @JsonIgnore
-    public Set<Order> getOrders(){
+    public Set<Order> getOrders() {
         Set<Order> orderSet = new HashSet<>();
 
-        for (OrderItem orderItem : items){
+        for (OrderItem orderItem : items) {
             orderSet.add(orderItem.getOrder());
         }
         return orderSet;

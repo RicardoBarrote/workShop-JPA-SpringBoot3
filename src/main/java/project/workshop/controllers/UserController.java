@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import project.workshop.entities.User;
+import project.workshop.requestPayLoad.UserRequestPayLoad;
 import project.workshop.services.UserService;
 
 import java.net.URI;
@@ -18,20 +19,20 @@ public class UserController {
     UserService userService;
 
     @GetMapping
-    ResponseEntity<List<User>> findAll() {
+    ResponseEntity<List<User>> getAllUser() {
         List<User> listUser = userService.findAll();
         return ResponseEntity.ok().body(listUser);
     }
 
     @GetMapping(value = "/{id}")
-    ResponseEntity<User> findById(@PathVariable Integer id) {
+    ResponseEntity<User> getUser(@PathVariable Integer id) {
         User user = userService.findById(id);
         return ResponseEntity.ok().body(user);
     }
 
     @PostMapping
-    public ResponseEntity<User> createdUser(@RequestBody User user) {
-        user = userService.createdUser(user);
+    public ResponseEntity<User> createdUser(@RequestBody UserRequestPayLoad payLoad) {
+        User user = userService.createdUser(payLoad);
 
         URI newUri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -48,9 +49,9 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User user) {
-        user = userService.updateUser(id, user);
+  @PutMapping(value = "/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody UserRequestPayLoad payLoad) {
+        User user = userService.updateUser(id, payLoad);
         return ResponseEntity.ok().body(user);
     }
 }

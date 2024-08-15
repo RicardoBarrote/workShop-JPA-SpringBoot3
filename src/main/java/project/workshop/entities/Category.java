@@ -2,6 +2,7 @@ package project.workshop.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import project.workshop.requestPayLoad.CategoryRequestPayLoad;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -12,7 +13,7 @@ import java.util.Set;
 public class Category {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false)
@@ -29,6 +30,11 @@ public class Category {
     public Category(Integer id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public Category(CategoryRequestPayLoad payLoad) {
+        this.id = payLoad.id();
+        this.name = payLoad.name();
     }
 
     public Integer getId() {

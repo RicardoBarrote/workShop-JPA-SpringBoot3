@@ -2,13 +2,14 @@ package project.workshop.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import project.workshop.entities.Product;
+import project.workshop.requestPayLoad.CategoryRequestPayLoad;
+import project.workshop.requestPayLoad.ProductRequestPayload;
 import project.workshop.services.ProductService;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -30,4 +31,22 @@ public class ProductController {
         return ResponseEntity.ok().body(product);
     }
 
+    @PostMapping
+    public ResponseEntity<Product> createdProduct(@RequestBody ProductRequestPayload payload) {
+        Product product = productService.createdProduct(payload);
+
+        URI newURI = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(product.getId())
+                .toUri();
+
+        return ResponseEntity.created(newURI).body(product);
+    }
+
+    @PostMapping(value = "/{id}")
+    public ResponseEntity<Product> addCategory(@PathVariable Integer id, @RequestBody CategoryRequestPayLoad payLoad) {
+        Product product = productService.addCategory(id, payLoad.id());
+        return ResponseEntity.ok().body(product);
+    }
 }

@@ -1,8 +1,10 @@
 package project.workshop.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import project.workshop.enums.OrderStatus;
+import project.workshop.requestPayLoad.OrderRequestPayLoad;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -17,9 +19,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(nullable = false)
     private LocalDateTime moment;
-
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -37,11 +39,20 @@ public class Order {
         super();
     }
 
+    //Excluir no final este construtor, pós está sendo usado apenas no seeding de test.
     public Order(Integer id, LocalDateTime moment, OrderStatus orderStatus, User client) {
         this.id = id;
-        this.moment = moment;
+        this.moment = LocalDateTime.now();
         setOrderStatus(orderStatus);
         this.client = client;
+    }
+
+    //Construtor do DTO, passando User também pós na classe de service iremos buscar o usuário responsável pelo pedido através do ID do usuário.
+    public Order(OrderRequestPayLoad payLoad, User user) {
+        this.id = payLoad.id();
+        this.moment = LocalDateTime.now();
+        setOrderStatus(OrderStatus.WAITING_PAYMENT);
+        this.client = user;
     }
 
     public Integer getId() {
@@ -89,9 +100,10 @@ public class Order {
         this.orderStatus = status.getCode();
     }
 
-    public double getTotal(){
+    //Responsável pela soma total do pedido.
+    public double getTotal() {
         double sum = 0.0;
-        for (OrderItem orderItem : items){
+        for (OrderItem orderItem : items) {
             sum += orderItem.getSubTotal();
         }
         return sum;
