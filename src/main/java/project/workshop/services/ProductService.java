@@ -7,10 +7,9 @@ import project.workshop.entities.Product;
 import project.workshop.repositories.CategoryRepository;
 import project.workshop.repositories.ProductRepository;
 import project.workshop.requestPayLoad.ProductRequestPayload;
+import project.workshop.services.exceptions.ResourcerNotFound;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -26,28 +25,37 @@ public class ProductService {
     }
 
     public Product findById(Integer id) {
-        Optional<Product> productId = productRepository.findById(id);
-        return productId.get();
+        return productRepository.findById(id).orElseThrow(() -> new ResourcerNotFound(id));
     }
 
     public Product createdProduct(ProductRequestPayload payload) {
         Product product = new Product(payload);
-        productRepository.save(product);
-        return product;
+        return productRepository.save(product);
     }
 
     public Product addCategory(Integer idProduct, Integer idCategory) {
-        Optional<Product> optionalProduct = productRepository.findById(idProduct);
-        Optional<Category> optionalCategory = categoryRepository.findById(idCategory);
+        Product product = productRepository.findById(idProduct).orElseThrow(() -> new ResourcerNotFound(idProduct));
+        Category category = categoryRepository.findById(idCategory).orElseThrow(() -> new ResourcerNotFound(idCategory));
 
-        if (optionalProduct.isPresent() && optionalCategory.isPresent()) {
-            Product product = optionalProduct.get();
-            Category category = optionalCategory.get();
-
-            product.getCategories().add(category);
-            productRepository.save(product);
-            return product;
-        }
-        throw new NoSuchElementException("");
+        product.getCategories().add(category);
+        return productRepository.save(product);
     }
+
+    public void deleteCategoryToProduct(Integer idProduct, Integer idCategory) {
+        Product product = productRepository.findById(idProduct).orElseThrow(() -> new ResourcerNotFound(idProduct));
+        Category category = categoryRepository.findById(idCategory).orElseThrow(() -> new ResourcerNotFound(idCategory));
+
+        boolean removed = product.getCategories()
+                .stream()
+                .filter(c -> c.getId().equals(idCategory))
+                .findFirst()
+                .map(c -> product.getCategories().remove(c))
+                .orElseThrow(() -> new ResourcerNotFound(idCategory));
+
+        if (removed){
+            productRepository.save(product);
+        }
+    }
+
+
 }

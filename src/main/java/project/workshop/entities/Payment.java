@@ -1,6 +1,7 @@
 package project.workshop.entities;
 
 import jakarta.persistence.*;
+import project.workshop.requestPayLoad.PaymentRequestPayLoad;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -27,6 +28,12 @@ public class Payment {
     public Payment(Integer id, LocalDateTime moment, Order order) {
         this.id = id;
         this.moment = moment;
+        this.order = order;
+    }
+
+    public Payment(PaymentRequestPayLoad payLoad, Order order) {
+        this.id = payLoad.id();
+        this.moment = LocalDateTime.now();
         this.order = order;
     }
 

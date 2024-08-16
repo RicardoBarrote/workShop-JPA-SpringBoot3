@@ -7,6 +7,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import project.workshop.entities.Order;
 import project.workshop.requestPayLoad.OrderItemRequestPayLoad;
 import project.workshop.requestPayLoad.OrderRequestPayLoad;
+import project.workshop.requestPayLoad.PaymentRequestPayLoad;
 import project.workshop.services.OrderService;
 
 import java.net.URI;
@@ -45,7 +46,7 @@ public class OrderController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Order> deleteOrder(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteOrder(@PathVariable Integer id) {
         orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();
     }
@@ -53,6 +54,18 @@ public class OrderController {
     @PostMapping(value = "/{id}/products")
     public ResponseEntity<Order> addProductToOrder(@PathVariable Integer id, @RequestBody OrderItemRequestPayLoad payLoad) {
         Order order = orderService.addProductToOrder(id, payLoad.id(), payLoad.quantity());
+        return ResponseEntity.ok().body(order);
+    }
+
+    @DeleteMapping(value = "/{idOrder}/products/{idProduct}")
+    public ResponseEntity<Order> deleteProductToOrder(@PathVariable Integer idOrder, @PathVariable Integer idProduct) {
+        orderService.deleteProductToOrder(idOrder, idProduct);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/{id}/payment")
+    public ResponseEntity<Order> paymentOrder(@PathVariable Integer id, PaymentRequestPayLoad payLoad) {
+        Order order = orderService.paymentOrder(id, payLoad);
         return ResponseEntity.ok().body(order);
     }
 }

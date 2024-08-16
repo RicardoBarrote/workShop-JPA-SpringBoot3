@@ -5,10 +5,11 @@ import org.springframework.stereotype.Service;
 import project.workshop.entities.Category;
 import project.workshop.repositories.CategoryRepository;
 import project.workshop.requestPayLoad.CategoryRequestPayLoad;
+import project.workshop.services.exceptions.PropertyNull;
+import project.workshop.services.exceptions.ResourcerNotFound;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -21,14 +22,15 @@ public class CategoryService {
     }
 
     public Category findById(Integer id) {
-        Optional<Category> userId = categoryRepository.findById(id);
-        return userId.get();
+        return categoryRepository.findById(id).orElseThrow(() -> new ResourcerNotFound(id));
     }
 
     public Category createdCategory(CategoryRequestPayLoad payLoad) {
         Category category = new Category(payLoad);
-        categoryRepository.save(category);
-        return category;
+        if (category.getName() == null){
+            throw new PropertyNull("Null field");
+        }
+        return categoryRepository.save(category);
     }
 
     public void deleteCategory(Integer id) {
@@ -37,16 +39,11 @@ public class CategoryService {
     }
 
     public Category updateCategory(Integer id, CategoryRequestPayLoad payLoad) {
-        Optional<Category> optionalCategory = categoryRepository.findById(id);
-
-        if (optionalCategory.isPresent()) {
-            Category category = optionalCategory.get();
-
-            category.setName(payLoad.name());
-            categoryRepository.save(category);
-            return category;
-        }
-
-        throw new NoSuchElementException("");
+        return categoryRepository.findById(id)
+                .map(category -> {
+                    category.setName(payLoad.name());
+                    return categoryRepository.save(category);
+                })
+                .orElseThrow(() -> new ResourcerNotFound(id));
     }
 }

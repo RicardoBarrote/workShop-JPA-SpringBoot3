@@ -34,7 +34,7 @@ public class TestConfig implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        User u1 = new User(null, "Ricardo Barrote", "ricardo@gmail.com", "159753", "81985748758");
+       /* User u1 = new User(null, "Ricardo Barrote", "ricardo@gmail.com", "159753", "81985748758");
         User u2 = new User(null, "Ademilton", "ademilton@gmail.com", "5858585", "81985421578");
         userRepository.saveAll(Arrays.asList(u1, u2));
 
@@ -62,7 +62,7 @@ public class TestConfig implements CommandLineRunner {
         OrderItem oi3 = new OrderItem(o2, p2, 4, p2.getPrice());
         orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3));
 
-       /* Payment pay1 = new Payment(null, LocalDateTime.of(2024, 05, 15, 20, 58, 16), o1);
+        Payment pay1 = new Payment(null, LocalDateTime.of(2024, 05, 15, 20, 58, 16), o1);
         o1.setPayment(pay1);
         orderRepository.saveAll(Arrays.asList(o1));*/
     }

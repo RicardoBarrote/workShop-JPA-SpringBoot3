@@ -102,11 +102,9 @@ public class Order {
 
     //Responsável pela soma total do pedido.
     public double getTotal() {
-        double sum = 0.0;
-        for (OrderItem orderItem : items) {
-            sum += orderItem.getSubTotal();
-        }
-        return sum;
+        return items.stream()
+                .mapToDouble(OrderItem::getSubTotal) //Mapeia a classe OrderItem, para o metodo subTotal.
+                .sum(); //Soma tudo que esta no subTotal.
     }
 
     @Override

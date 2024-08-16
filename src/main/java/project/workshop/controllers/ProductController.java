@@ -49,4 +49,10 @@ public class ProductController {
         Product product = productService.addCategory(id, payLoad.id());
         return ResponseEntity.ok().body(product);
     }
+
+    @DeleteMapping(value = "/{idProduct}/category/{idCategory}")
+    public ResponseEntity<Product> deleteCategoryToProduct(@PathVariable Integer idProduct, @PathVariable Integer idCategory) {
+        productService.deleteCategoryToProduct(idProduct, idCategory);
+        return ResponseEntity.noContent().build();
+    }
 }

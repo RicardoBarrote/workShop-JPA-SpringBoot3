@@ -11,6 +11,7 @@ import project.workshop.services.CategoryService;
 import java.net.URI;
 import java.util.List;
 
+
 @RestController
 @RequestMapping(value = "/categories")
 public class CategoryController {
