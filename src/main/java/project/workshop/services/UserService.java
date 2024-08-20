@@ -9,7 +9,6 @@ import project.workshop.services.exceptions.ResourcerNotFound;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class UserService {
